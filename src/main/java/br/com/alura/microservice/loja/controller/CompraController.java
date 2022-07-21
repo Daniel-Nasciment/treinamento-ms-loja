@@ -21,6 +21,7 @@ public class CompraController {
 	@PostMapping
 	public ResponseEntity<?> postMethodName(@RequestBody CompraRequest request) {
 		
+		compraService.realizaCompra(request);
 		
 		return ResponseEntity.ok().build();
 	}
