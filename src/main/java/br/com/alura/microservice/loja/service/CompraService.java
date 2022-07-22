@@ -44,6 +44,9 @@ public class CompraService {
 		.forEach(f -> {
 			System.out.println("localhost:"+f.getPort());
 		});
+		
+		// https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.2.0.M3/reference/html/#customizing-the-default-for-all-ribbon-clients
+		// LINK PARA CUSTOMIZAÇÃO DA ROTACAO DO LOAD BALANCER
 
 		System.out.println(exchange.getBody().getEndereco());
 
