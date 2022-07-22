@@ -24,6 +24,9 @@ public class CompraService {
 		LOG.info("Buscando informações do fornecedor de {}", request.getEndereco().getEstado());
 		InfoFornecedorResponse info = fornecedorClient.getInfoPorEstado(request.getEndereco().getEstado());
 		
+		// SPRING SLEUTH AJUDA  AGENTE A ACOMPANHAR LOGS, ELE CARREGA UM ID DA TRANSACAO POR TODOS OS DEMAIS MICRO SERVICOS
+		// ATE COMPLETAR A TRANSACAO
+		
 		LOG.info("Realizando um pedido");
 		InfoPedidoResponse pedido = fornecedorClient.realizarPedido(request.getItens());
 		
