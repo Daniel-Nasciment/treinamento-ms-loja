@@ -32,4 +32,9 @@ public class EnderecoRequest {
 		this.estado = estado;
 	}
 
+	@Override
+	public String toString() {
+		return "EnderecoRequest [rua=" + rua + ", numero=" + numero + ", estado=" + estado + "]";
+	}
+
 }
