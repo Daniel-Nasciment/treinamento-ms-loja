@@ -13,6 +13,7 @@ public class LojaFloriculturaApplication {
 
 	@Bean
 	@LoadBalanced // ESSE CARA VAI DAR A INTELIGENCIA AO REST TEMPLATE PARA RESOLVER A URL EM COMPRASERVICE
+	// LOAD BALANCE DISTRIBUI A CARGA, OU SEJA, A CADA REUISICAO ELE VAI PROCURAR POR UM IP E PORTA DIFERENTE
 	public RestTemplate getRestTemplte() {
 		return new RestTemplate();
 	}
