@@ -50,6 +50,7 @@ public class CompraService {
 
 	}
 	
+	// BASICAMENTE ESSE É UM MÉTODO PARA TRATAMENTO DE ERRO NO CASO DE UM CRICUIT BREAKER
 	public Compra realizaCompraFallback(CompraRequest request) {
 		
 		return new Compra(1L, 1, "Teste fallback");
