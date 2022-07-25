@@ -37,12 +37,12 @@ public class CompraService {
 		InfoPedidoResponse pedido = fornecedorClient.realizarPedido(request.getItens());
 		
 		// ESSE CARA PARA A THREAD SEM A NECESSIDADE DO BREAK POINT
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		System.out.println(info.getEndereco());
 		
