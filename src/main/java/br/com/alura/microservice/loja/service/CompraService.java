@@ -21,6 +21,9 @@ public class CompraService {
 	@Autowired
 	private  FornecedorClient fornecedorClient;
 	
+	// HYSTRIX MONITORA A EXECUCAO, CASO TENHA MUITOS ERROS NA EXECUCAO DO METODO realizaCompra
+	// ELE EXECUTA DIRETAMENTE O METODO DE FALLBACK, E DEPOIS DE ALGUM TEMPO ELE RETORNA AO METODO realizaCompra
+	// PARA VERIFICAR SE O MESMO VOLTOU A FUNCIONAR NORMALMENTE
 	@HystrixCommand(fallbackMethod = "realizaCompraFallback")
 	public Compra realizaCompra(CompraRequest request) {
 
@@ -32,6 +35,14 @@ public class CompraService {
 		
 		LOG.info("Realizando um pedido");
 		InfoPedidoResponse pedido = fornecedorClient.realizarPedido(request.getItens());
+		
+		// ESSE CARA PARA A THREAD SEM A NECESSIDADE DO BREAK POINT
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		System.out.println(info.getEndereco());
 		
