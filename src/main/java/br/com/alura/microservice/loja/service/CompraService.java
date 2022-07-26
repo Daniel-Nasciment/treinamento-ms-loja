@@ -1,5 +1,7 @@
 package br.com.alura.microservice.loja.service;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 import br.com.alura.microservice.loja.feign.FornecedorClient;
 import br.com.alura.microservice.loja.model.Compra;
+import br.com.alura.microservice.loja.repository.CompraRepository;
 import br.com.alura.microservice.loja.request.CompraRequest;
 import br.com.alura.microservice.loja.response.InfoFornecedorResponse;
 import br.com.alura.microservice.loja.response.InfoPedidoResponse;
@@ -17,6 +20,9 @@ import br.com.alura.microservice.loja.response.InfoPedidoResponse;
 public class CompraService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CompraService.class);
+	
+	@Autowired
+	private CompraRepository compraRepository;
 	
 	@Autowired
 	private  FornecedorClient fornecedorClient;
@@ -29,6 +35,7 @@ public class CompraService {
 
 		LOG.info("Buscando informações do fornecedor de {}", request.getEndereco().getEstado());
 		InfoFornecedorResponse info = fornecedorClient.getInfoPorEstado(request.getEndereco().getEstado());
+		LOG.info("Endereco info fornecedor: {}", info.getEndereco());
 		
 		// SPRING SLEUTH AJUDA  AGENTE A ACOMPANHAR LOGS, ELE CARREGA UM ID DA TRANSACAO POR TODOS OS DEMAIS MICRO SERVICOS
 		// ATE COMPLETAR A TRANSACAO
@@ -36,17 +43,11 @@ public class CompraService {
 		LOG.info("Realizando um pedido");
 		InfoPedidoResponse pedido = fornecedorClient.realizarPedido(request.getItens());
 		
-		// ESSE CARA PARA A THREAD SEM A NECESSIDADE DO BREAK POINT
-//		try {
-//			Thread.sleep(2000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		Compra compra = new Compra(pedido.getId(), pedido.getTempoDePreparo(), request.getEndereco().toString());
 		
-		System.out.println(info.getEndereco());
+		compraRepository.save(compra);
 		
-		return new Compra(pedido.getId(), pedido.getTempoDePreparo(), request.getEndereco().toString());
+		return compra;
 
 	}
 	
@@ -55,6 +56,18 @@ public class CompraService {
 		
 		return new Compra(1L, 1, "Teste fallback");
 		
+	}
+
+	@HystrixCommand
+	public Compra buscarCompra(Long id) {
+
+		Optional<Compra> compra = compraRepository.findById(id);
+		
+		if(compra.isPresent()) {
+			return compra.get();
+		}
+		
+		return null;
 	}
 
 }
