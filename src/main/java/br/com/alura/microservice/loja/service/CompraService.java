@@ -30,7 +30,7 @@ public class CompraService {
 	// HYSTRIX MONITORA A EXECUCAO, CASO TENHA MUITOS ERROS NA EXECUCAO DO METODO realizaCompra
 	// ELE EXECUTA DIRETAMENTE O METODO DE FALLBACK, E DEPOIS DE ALGUM TEMPO ELE RETORNA AO METODO realizaCompra
 	// PARA VERIFICAR SE O MESMO VOLTOU A FUNCIONAR NORMALMENTE
-	@HystrixCommand(fallbackMethod = "realizaCompraFallback")
+	@HystrixCommand(fallbackMethod = "realizaCompraFallback", threadPoolKey = "realizaCompraThreadPool")
 	public Compra realizaCompra(CompraRequest request) {
 
 		LOG.info("Buscando informações do fornecedor de {}", request.getEndereco().getEstado());
@@ -58,9 +58,14 @@ public class CompraService {
 		
 	}
 
-	@HystrixCommand
+	@HystrixCommand(threadPoolKey = "buscarCompraThreadPool")
 	public Compra buscarCompra(Long id) {
 
+		// threadPoolKey É A FORMA DE CONFIGURAR O BULKHEAD PARA DIVISÃO DE THREADS 
+		// DADO O EXEMPLO DE QUE UM MS NÃO ESTEJA FUNCIONANDO COMO ESPERADO
+		// FARIAMOS 10 REQUISIÇÕES QUE FALHARIAM/DEMORARIAM E O HYSTRIX GUARDARIA ESSAS REQUISIÇÕES CONSUMINDO TODAS AS THREADS
+		// CONDIFURANDO DESSA FORMA O HYSTRIX BULKHEAD AGRUPA AS THREADS COM A CONFIGURAÇÃO threadPoolKey
+		
 		Optional<Compra> compra = compraRepository.findById(id);
 		
 		if(compra.isPresent()) {

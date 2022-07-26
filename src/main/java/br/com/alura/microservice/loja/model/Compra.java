@@ -13,12 +13,15 @@ public class Compra {
 
 	private String enderecoDestino;
 
+	public Compra() {
+	}
+
 	public Compra(Long id, Integer tempoDePreparo, String endereco) {
 
 		this.idPedido = id;
 		this.tempoDePreparo = tempoDePreparo;
 		this.enderecoDestino = endereco;
-	
+
 	}
 
 	public Long getIdPedido() {
