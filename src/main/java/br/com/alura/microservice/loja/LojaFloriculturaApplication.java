@@ -23,6 +23,9 @@ import feign.RequestTemplate;
 @EnableResourceServer
 public class LojaFloriculturaApplication {
 
+	// ATRAVEZ DO SPRING É INJETADO INSTANCIAS DE RequestInterceptor DENTRO DO FEIGN CLIENT
+	// DESSA FORMA FORNECEMOS UMA INSTANCIA PARA O SPRING QUE SERA INJETADA NO FEIGN
+	
 	@Bean
 	public RequestInterceptor getInterceptorToken() {
 		return new RequestInterceptor() {
