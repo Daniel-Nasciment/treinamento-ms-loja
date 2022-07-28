@@ -34,6 +34,7 @@ public class LojaFloriculturaApplication {
 			// POIS O PROCESSAMENTO DO MÉTODO REALIZA COMPRA ESTA ASSOCIADO AO POOL DE THREADS DO HYSTRIX
 			// É NECESSARIO CONFIGURAR ISSO NO APP PROPERTIES
 			
+			// O APPLY É CHAMADO SEMPRE ANTES DE CADA REQUISIÇÃO DO FEIGN
 			@Override
 			public void apply(RequestTemplate template) {
 				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
